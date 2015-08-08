@@ -1,0 +1,116 @@
+----------------------------------------------------------------
+-- Copyright (c) 2012 Klei Entertainment Inc.
+-- All Rights Reserved.
+-- SPY SOCIETY.
+----------------------------------------------------------------
+
+local simdefs = include( "sim/simdefs" )
+
+local _M =
+{
+	EVENT_SELECTED = 1,
+	EVENT_ATTACK_GUN = 2,
+	EVENT_ATTACK_MELEE = 3,
+	EVENT_HIT_GUN = 4,
+	EVENT_HIT_MELEE = 5,
+	EVENT_KILL_GUN = 6,
+	EVENT_KILL_MELEE = 7,
+	EVENT_MISS_GUN = 8,
+	EVENT_IS_HIT = 9,
+	EVENT_HP_DOWN = 10,
+	EVENT_DEATH = 12,
+	EVENT_REVIVED = 13,
+	EVENT_HIJACK = 14,
+	EVENT_INTERRUPTED = 15,
+	EVENT_PEEK = 16,
+	EVENT_OVERWATCH = 17,
+	EVENT_OVERWATCH_TARGET = 18,
+	EVENT_PIN = 19,
+	EVENT_ATTACK_GUN_KO = 20,	
+	EVENT_HIT_GUN_KO = 21,
+	EVENT_LOOT = 23,
+
+	-- NPC events
+	INVESTIGATE_GENERIC = 100,
+	INVESTIGATE_NOISE = 101,
+	INVESTIGATE_SAW = 102,
+	INVESTIGATE_DRONE = 103,
+	INVESTIGATE_SEARCH = 104,
+	INVESTIGATE_FINISH = 105,
+	INVESTIGATE_REINFORCEMENT = 106,
+
+	HUNT_GENERIC = 120,
+	HUNT_SEARCH = 121,
+	HUNT_FINISH = 122,
+	HUNT_LOSTTARGET = 123,
+	HUNT_WAKEUP = 124,
+	HUNT_CORPSE = 125,
+	HUNT_NOISE = 127,
+	HUNT_SAW = 128,
+	HUNT_FOUNDOBJECT = 129,
+	HUNT_DRONE = 130,
+	HUNT_REINFORCEMENT = 131,
+	HUNT_BREAKDOOR = 132,
+	HUNT_GRENADE = 133,
+
+	COMBAT_NEWTARGET = 140,
+	COMBAT_TARGETDESTROYED = 141,
+	COMBAT_NEWTURRET = 142,
+	COMBAT_TURRETDESTROYED = 143,
+
+	FLEE_PANIC = 150,
+	FLEE_COWER = 151,
+	FLEE_STARTLED = 152,
+}
+
+_M.NPC = {
+	[_M.INVESTIGATE_GENERIC] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_INVESTIGATE},
+	[_M.INVESTIGATE_NOISE] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_INVESTIGATE_NOISE},
+	[_M.INVESTIGATE_SAW] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_INVESTIGATE_SAW},
+	[_M.INVESTIGATE_DRONE] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_INVESTIGATE_DRONE},
+	[_M.INVESTIGATE_SEARCH] = { sound = simdefs.SOUND_MED, 1, {neverInterrupt=true}, speech=simdefs.SOUND_SPEECH_GUARD_INVESTIGATE_SEARCH},
+	[_M.INVESTIGATE_FINISH] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_INVESTIGATE_FINISH},
+	[_M.INVESTIGATE_REINFORCEMENT] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_INVESTIGATE_REINFORCEMENT},
+
+	[_M.HUNT_GENERIC] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT},
+	[_M.HUNT_NOISE] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_NOISE},
+	[_M.HUNT_SAW] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_SAW},
+	[_M.HUNT_FOUNDOBJECT] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_FOUNDOBJECT},
+	[_M.HUNT_SEARCH] = { sound = simdefs.SOUND_MED, 1, {neverInterrupt=true}, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_SEARCH},
+	[_M.HUNT_FINISH] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_FINISH},
+	[_M.HUNT_LOSTTARGET] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_LOSTTARGET},
+	[_M.HUNT_WAKEUP] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_WAKEUP},
+	[_M.HUNT_CORPSE] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_CORPSE},
+	[_M.HUNT_DRONE] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_DRONE},
+	[_M.HUNT_REINFORCEMENT] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_REINFORCEMENT},
+	[_M.HUNT_BREAKDOOR] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_BREAKDOOR},
+	[_M.HUNT_GRENADE] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_HUNT_GRENADE},
+
+	[_M.COMBAT_NEWTARGET] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_COMBAT_NEWTARGET},
+	[_M.COMBAT_TARGETDESTROYED] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_COMBAT_TARGETDOWN},
+	[_M.COMBAT_NEWTURRET] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_COMBAT_NEWTURRET},
+	[_M.COMBAT_TURRETDESTROYED] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_COMBAT_TURRETDOWN},
+
+	[_M.FLEE_PANIC] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_FLEE_PANIC},
+	[_M.FLEE_COWER] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_FLEE_COWER},
+	[_M.FLEE_STARTLED] = { sound = simdefs.SOUND_MED, 1, nil, speech=simdefs.SOUND_SPEECH_GUARD_FLEE_STARTLED},
+}
+
+_M.stealth_1 = STRINGS.AGENTS.DECKARD.BANTER
+_M.stealth_2 = STRINGS.AGENTS.BANKS.BANTER
+
+_M.engineer_1 = STRINGS.AGENTS.XU.BANTER
+_M.engineer_2 = STRINGS.AGENTS.INTERNATIONALE.BANTER
+
+_M.sharpshooter_1 = STRINGS.AGENTS.SHALEM.BANTER
+_M.sharpshooter_2 = STRINGS.AGENTS.NIKA.BANTER
+
+_M.prisoner = STRINGS.AGENTS.PRISONER.BANTER
+
+_M.disguise_1 = STRINGS.AGENTS.PRISM.BANTER
+_M.cyborg_1 = STRINGS.AGENTS.SHARP.BANTER
+
+_M.monst3r = STRINGS.AGENTS.MONST3R.BANTER
+_M.central = STRINGS.AGENTS.CENTRAL.BANTER
+
+return _M

@@ -1,0 +1,10 @@
+mods
+_CommonRedist
+build.txt
+LICENSE
+*.kwad
+*.dll
+*.dat
+*.zip
+*.exe
+*.cab
