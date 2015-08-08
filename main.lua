@@ -20,7 +20,7 @@ function updateConfig()
         NOSAVES = false,
         CLOUDSAVES = true,
 		GUI_MEDIA = "data/gui",
-        SHOW_CONSOLE = false,
+        SHOW_CONSOLE = true,
 		NOSOUND = false,
         NOSPLASH = false,
 		SOUND_OCCLUSION = true,
@@ -38,7 +38,7 @@ function updateConfig()
         CRASH_CHANNEL = "#invinc-crashes-dev",
 		DBG_FILE = "",
         CAMPAIGN_HOURS = 72,
-		DEV = false,
+		DEV = true,
 		RECORD_MODE = false,
 		MANUAL_CAM = false,
         DBG_CAM = false,
@@ -80,7 +80,7 @@ updateConfig()
 
 ----------------------------------------------------------------
 
-MOAIFileSystem.mountVirtualDirectory( "game", "scripts.zip" )
+--MOAIFileSystem.mountVirtualDirectory( "game", "scripts.zip" )
 dofile( string.format( "%s/client/include.lua", config.SRC_MEDIA ))
 
 ----------------------------------------------------------------
@@ -111,7 +111,8 @@ if gSupportNewXANIM then
 end
 
 local bugreport = include( "modules/bugreport" )
-MOAISim.setTraceback( bugreport.reportTraceback )
+--MOAISim.setTraceback( bugreport.reportTraceback )
+MOAISim.setTraceback( function( err ) os.execute("timeout " .. 5) end ) 
 
 ---------------------------------------------------------------------
 -- Localization and string translation

@@ -1,10 +1,9 @@
-mods
 _CommonRedist
-build.txt
-LICENSE
-*.kwad
-*.dll
-*.dat
-*.zip
+mods
 *.exe
-*.cab
+*.dll
+*.zip
+*.dat
+*.kwad
+LICENSE
+build.txt
