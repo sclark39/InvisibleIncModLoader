@@ -3327,6 +3327,208 @@ widgets =
                     },
                 },
             },
+            {
+                {
+                    name = [[New Widget]],
+                    isVisible = true,
+                    noInput = false,
+                    anchor = 1,
+                    rotation = 0,
+                    x = 0,
+                    y = 0,
+                    w = 0,
+                    h = 0,
+                    sx = 1,
+                    sy = 1,
+                    ctor = [[group]],
+                    children =
+                    {
+                        {
+                            name = [[tabButton]],
+                            isVisible = true,
+                            noInput = false,
+                            anchor = 1,
+                            rotation = 0,
+                            x = 246,
+                            xpx = true,
+                            y = 56,
+                            ypx = true,
+                            w = 160,
+                            wpx = true,
+                            h = 28,
+                            hpx = true,
+                            sx = 1,
+                            sy = 1,
+                            ctor = [[button]],
+                            clickSound = [[SpySociety/HUD/menu/click]],
+                            hoverSound = [[SpySociety/HUD/menu/rollover]],
+                            hoverScale = 1.1,
+                            str = [[MODS]],
+                            halign = MOAITextBox.CENTER_JUSTIFY,
+                            valign = MOAITextBox.CENTER_JUSTIFY,
+                            text_style = [[font1_16_r]],
+                            images =
+                            {
+                                {
+                                    file = [[tab.png]],
+                                    name = [[inactive]],
+                                },
+                                {
+                                    file = [[tab_hover.png]],
+                                    name = [[hover]],
+                                },
+                                {
+                                    file = [[tab_active.png]],
+                                    name = [[active]],
+                                },
+                                {
+                                    file = [[tab_selected.png]],
+                                    name = [[selected_inactive]],
+                                },
+                                {
+                                    file = [[tab_selected_hover.png]],
+                                    name = [[selected_hover]],
+                                },
+                                {
+                                    file = [[tab_selected_active.png]],
+                                    name = [[selected_active]],
+                                },
+                            },
+                        },
+						
+                    },					
+                },
+                {
+                    name = [[New Widget]],
+                    isVisible = true,
+                    noInput = false,
+                    anchor = 1,
+                    rotation = 0,
+                    x = 0,
+                    y = 0,
+                    w = 0,
+                    h = 0,
+                    sx = 1,
+                    sy = 1,
+                    ctor = [[group]],
+                    children =
+                    {
+                        {
+                            name = [[modsList]],
+                            isVisible = true,
+                            noInput = false,
+                            anchor = 1,
+                            rotation = 0,
+                            x = -38,
+                            xpx = true,
+                            y = -212,
+                            ypx = true,
+                            w = 576,
+                            wpx = true,
+                            h = 380,
+                            hpx = true,
+                            sx = 1,
+                            sy = 1,
+                            ctor = [[listbox]],
+                            item_template = [[KeyBinding]],
+                            scrollbar_template = [[listbox_vscroll]],
+                            item_spacing = 36,
+                            images =
+                            {
+                                {
+                                    file = [[]],
+                                    name = [[inactive]],
+                                },
+                                {
+                                    file = [[]],
+                                    name = [[active]],
+                                },
+                                {
+                                    file = [[tab.png]],
+                                    name = [[hover]],
+                                },
+                            },
+                        },
+						{
+								name = [[refreshModsBtn2]],
+								isVisible = true,
+								noInput = false,
+								anchor = 1,
+								rotation = 0,
+								x = -215,
+								xpx = true,
+								y = -433,
+								ypx = true,
+								w = 190,
+								wpx = true,
+								h = 38,
+								hpx = true,
+								sx = 1,
+								sy = 1,
+								tooltip =
+								{
+									str = [[STR_3416994251]],
+								},
+								tooltipHeader =
+								{
+									str = [[STR_1398683546]],
+								},
+								ctor = [[button]],
+								clickSound = [[SpySociety/HUD/menu/click]],
+								hoverSound = [[SpySociety/HUD/menu/rollover]],
+								hoverScale = 1,
+								str = [[REFRESH MODS]],
+								hotkey = 13,
+								halign = MOAITextBox.RIGHT_JUSTIFY,
+								valign = MOAITextBox.CENTER_JUSTIFY,
+								text_style = [[font1_16_r]],
+								offset =
+								{
+									x = -15,
+									xpx = true,
+									y = 0,
+									ypx = true,
+								},
+								images =
+								{
+									{
+										file = [[white.png]],
+										name = [[inactive]],
+										color =
+										{
+											0.30588236451149,
+											0.533333361148834,
+											0.533333361148834,
+											0.39215686917305,
+										},
+									},
+									{
+										file = [[white.png]],
+										name = [[hover]],
+										color =
+										{
+											0.549019634723663,
+											1,
+											1,
+											0.39215686917305,
+										},
+									},
+									{
+										file = [[white.png]],
+										name = [[active]],
+										color =
+										{
+											0.549019634723663,
+											1,
+											1,
+											0.39215686917305,
+										},
+									},
+								},
+							},
+                    },
+                },
+            },
         },
         selectedTab = 3,
     },

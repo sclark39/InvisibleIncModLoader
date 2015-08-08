@@ -253,6 +253,9 @@ local mui = include("mui/mui")
 mui.initMui( VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
 	function( filename )
 		if filename:find( ".lua" ) then
+			if filename == "options_dialog_screen.lua" then
+				return filesystem.pathJoin( "game/gui", filename)
+			end
 			return filesystem.pathJoin( config.GUI_MEDIA, filename)
 		elseif filename:find( ".png" ) then
 			return filesystem.pathJoin("data/gui/images", filename)

@@ -101,22 +101,30 @@ function mod_manager:initMod( modData )
             end
         end
 
-        if modinfo.name then
-            log:write( "\tNAME: %s", tostring(modinfo.name) )
-            modData.name = modinfo.name
-        end
-
         if modinfo.locale then
-            log:write( "\tLOCALE: %s", tostring(modinfo.locale) )
+            modData.name = modinfo.name
             modData.locale = modinfo.locale
-        end
-
-        if modinfo.poFile then
-            log:write( "\tPOFILE: %s", tostring(modinfo.poFile) )
             modData.poFile = modinfo.poFile
+			
+            log:write( "\tNAME: %s", tostring(modData.name) )
+            log:write( "\tLOCALE: %s", tostring(modData.locale) )
+            log:write( "\tPOFILE: %s", tostring(modData.poFile) )
+			
+			table.insert( self.mods, modData )
         end
 
-        table.insert( self.mods, modData )
+        if modinfo.modtype then
+            modData.name = modinfo.name
+            modData.modtype = modinfo.modtype
+            modData.mlversion = modinfo.mlversion or 1
+			
+            log:write( "\tNAME: %s", tostring(modData.name) )
+            log:write( "\tMOD TYPE: %s", tostring(modData.modtype) )
+            log:write( "\tML VERSION: %s", tostring(modData.mlversion) )
+			
+			table.insert( self.mods, modData )
+        end
+
         
     elseif MOAIFileSystem.checkFileExists( filesystem.pathJoin( modData.folder, "scripts.zip" )) then
         table.insert( self.mods, modData )
@@ -209,6 +217,81 @@ function mod_manager:getLanguageMods()
     for i, modData in ipairs(self.mods) do
         if modData.locale then
             table.insert( t, { name = modData.locale, id = modData.id } )
+        end
+    end
+    return t
+end
+
+function mod_manager:loadMLMod( id )
+    local modData = self:findMod( id )
+    if not modData then
+        log:write( "Could not load missing game mod: '%s'", tostring(id) )
+    elseif modData.modtype ~= "game" then
+        log:write( "Could not load non-game mod: '%s'", tostring(id) )
+	else
+        log:write( "Loading game mod: %s", tostring(id) )    
+	
+		local filename = filesystem.pathJoin( modData.folder, "main.lua" )
+		assert( filename ) -- Important assert, since loadfile's behaviour for nil filename is to read from stdin (can you say HANG?)
+		local f,e = loadfile( filename )
+		assert( f, e )		
+		local status, err = pcall( f )
+		if not status then			
+			modData.status = "ERR:SYNTAX"
+			log:write(err)
+		else
+			modData.obj = err
+			local status,err = xpcall(
+                function() return modData.obj:load() end,
+                function( err )
+                    log:write( "ml_mod.load ERROR: %s\n%s", tostring(err), debug.traceback() )
+                end )
+			if status and err then
+				modData.active = true
+				modData.status = "ON"
+			else
+				if not status then
+					log:write(err)
+				end
+				modData.active = false
+				modData.status = "ERR:RUNTIME"
+			end
+		end
+	
+	end
+end
+
+function mod_manager:unloadMLMod( id )
+    local modData = self:findMod( id )
+    if not modData then
+        log:write( "Could not unload missing game mod: '%s'", tostring(id) )	
+    elseif not modData.active then
+        log:write( "Could not unload non-loaded game mod: '%s'", tostring(id) )
+	else
+        log:write( "Unloading game mod: %s", tostring(id) )    
+		local status,err = xpcall(
+			function() return modData.obj:unload() end,
+			function( err )
+				log:write( "ml_mod.unload ERROR: %s\n%s", tostring(err), debug.traceback() )
+			end )
+		if status and err then
+			modData.active = false
+			modData.status = "OFF"
+		else
+			if not status then
+				log:write(err)
+			end
+			modData.active = false
+			modData.status = "ERR:RUNTIME"
+		end	
+	end
+end
+
+function mod_manager:getMLMods()
+	local t = {}
+    for i, modData in ipairs(self.mods) do
+        if modData.modtype == "game" then
+			table.insert( t, { name = modData.name or modData.title or "undefined", status = modData.status or "OFF", active = modData.active or false, id = modData.id } )
         end
     end
     return t

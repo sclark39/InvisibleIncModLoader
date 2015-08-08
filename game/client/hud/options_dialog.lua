@@ -154,6 +154,32 @@ local function refreshControls( dialog, keybindings )
     end
 end
 
+
+-- Update Controls tab UI to reflect key bindings.
+local function refreshModsList( dialog, mods )
+    local lb = dialog._screen.binder.modsList
+    lb:clearItems()
+    
+	mods = mod_manager:getMLMods();
+	
+	for i, mod in pairs( mods ) do
+		local ud = { idx = i, name = mod.name, modid = mod.id, active = mod.active, status = mod.status } 
+		local widget = lb:addItem( ud )
+		
+		local clr;
+		if ud.status == "ON" then
+			clr = "<font1_16b><c:00ff00>"
+		elseif ud.status == "OFF" then
+			clr = "<font1_16b>"
+		else -- ERR
+			clr = "<font1_16b><c:ff0000>"
+		end
+		widget.binder.bindingTxt:setText( ud.name )
+		widget.binder.keyTxt:setText( clr .. ud.status .. "</>" )
+			
+    end
+end
+
 -- Update GFX UI to reflect GFX settings.
 local function refreshGfx( dialog, settings )
     local gfx = settings.gfx
@@ -356,6 +382,18 @@ local function refreshModsButton( widget )
 end
 
 local function onClickRefreshMods( dialog )
+	local anyactivemods = false
+	local mods = mod_manager:getMLMods()
+	for i,mod in ipairs(mods) do
+		if mod.active then
+			anyactivemods = true
+		end
+	end
+	if anyactivemods then
+		modalDialog.show( "Restart the game or deactivate all running mods before refreshing" )
+		return
+	end
+
     mod_manager:updateMods()
     dialog.refreshLanguages = true
 end
@@ -448,6 +486,20 @@ local function onClickKeyBinding( dialog, i, user_data )
 	thread:resume()
 end
 
+local function onClickMod( dialog, i, user_data )
+	if not user_data then
+        return -- Clicked on a 'header' list item, not an actual key binding entry, so ignore.
+    end
+
+	if not user_data.active then
+		mod_manager:loadMLMod( user_data.modid )
+	else
+		mod_manager:unloadMLMod( user_data.modid )
+	end
+	
+	refreshModsList( dialog )
+end 
+
 ----------------------------------------------------------------
 -- Interface functions
 
@@ -467,7 +519,8 @@ function options_dialog:init(game)
     screen.binder.cancelBtn.binder.btn:setClickSound(cdefs.SOUND_HUD_MENU_CANCEL)
 	screen.binder.cancelBtn.binder.btn:setHotkey( "pause" )
 
-    screen.binder.refreshModsBtn.onClick = util.makeDelegate( nil, onClickRefreshMods, self )
+    screen.binder.refreshModsBtn.onClick = util.makeDelegate( nil, onClickRefreshMods, self )	
+    screen.binder.refreshModsBtn2.onClick = util.makeDelegate( nil, onClickRefreshMods, self )
     screen.binder.viewWorkshopBtn.onClick = util.makeDelegate( nil, onClickViewWorkshop, self )
 
     local function forceRefreshUI( )
@@ -517,6 +570,8 @@ function options_dialog:init(game)
     screen.binder.resetBindingsBtn.onClick = util.makeDelegate( nil, onClickResetBindingsBtn, self )
     screen.binder.controlsList.onItemClicked = util.makeDelegate( nil, onClickKeyBinding, self )
 
+    screen.binder.modsList.onItemClicked = util.makeDelegate( nil, onClickMod, self )
+	
 	screen.binder.tabs:selectTab( 1 )
 end
 
@@ -532,7 +587,8 @@ function options_dialog:show()
 	refresh( self, self._appliedSettings )
     refreshGfx( self, self._appliedSettings )
     refreshControls( self, self._appliedSettings.keybindings )
-
+	refreshModsList( self )
+	
     if not KLEISteamWorkshop then
         self._screen.binder.viewWorkshopBtn:setVisible( false ) -- No Steam.
         self._screen.binder.refreshModsBtn:setVisible( false )
@@ -546,7 +602,8 @@ function options_dialog:show()
                         if self.refreshLanguages then
                             log:write( "Re-populating language mods..." )
                             populateLanguageMods( self, self._appliedSettings )
-                            self.refreshLanguages = nil
+							refreshModsList( self )
+                            self.refreshLanguages = nil							
 
                             modalDialog.show( STRINGS.UI.MODS_REFRESH_COMPLETE )
                         end
